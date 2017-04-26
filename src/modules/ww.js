@@ -1,4 +1,4 @@
-import { EventEmitter } from 'eventemitter2'
+import { EventEmitter } from 'events'
 
 export default class WW extends EventEmitter {
   constructor (element, state = {}) {

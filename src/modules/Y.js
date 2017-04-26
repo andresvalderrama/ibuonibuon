@@ -2,9 +2,7 @@
 import * as PIXI from 'pixi.js'
 import WW from './ww'
 
-console.log(WW)
-
-export default class extends WW {
+export default class extends WW{
   constructor(selector) {
     super()
 
