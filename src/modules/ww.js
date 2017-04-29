@@ -1,24 +1,26 @@
 import { EventEmitter } from 'events'
 
 export default class WW extends EventEmitter {
-  constructor (element, state = {}) {
+  constructor (selector, state = {}) {
     super()
 
-    this.el = 'string' == typeof t ? document.querySelector(element) : element
-    this.$el = 'string' == typeof t ? document.querySelector(element) : element
     this.setMaxListeners(0)
-    
+    this.el = this.$el = 'string' == typeof selector ? document.querySelector(selector) : selector
+
+    /** revisar ???
+      if () {
+      }     
+    */    
 
     this.$els = {}
     this.$refs = {}
-    this.options = Object.assign({}, this.getDefaultOptions())
+    this.options = Object.assign({}, this.getDefaultOptions(), state)
 
     //var a = new d.default(i.$el, i)
 
     this.delegate = function (  ) {}
     this.undelegate = function ( ) {}
-    this.state = new Map
-    
+    this.state = new Map    
   }
 
   setRef () {

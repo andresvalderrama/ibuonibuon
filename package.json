@@ -4,20 +4,24 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "yarn run dev && yarn run prod",
-    "dev": "babel src -d lib",
-    "prod": "webpack -p"
+    "dev": "yarn run wpack && yarn run babel",
+    "babel": "babel src -d babel",
+    "wpack": "webpack",
+    "serve": "yarn run wpack && http-server ."
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
     "babel-core": "^6.24.1",
+    "babel-loader": "^7.0.0",
     "babel-preset-es2015": "^6.24.1",
     "eslint": "^3.19.0",
+    "http-server": "^0.9.0",
     "webpack": "^2.4.1"
   },
   "dependencies": {
-    "babel-loader": "^7.0.0",
+    "barba.js": "^1.0.0",
     "events": "^1.1.1",
+    "gsap": "^1.19.1",
     "pixi.js": "^4.5.1"
   }
 }

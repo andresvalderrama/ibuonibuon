@@ -1,18 +1,11 @@
-/*import exe from './yy'
-var P = undefined
+import newArray from './modules/new-array'
 
-document.addEventListener('DOMContentLoaded', function () {
-  var t = undefined
-  var e = undefined
-
-  new exe('#loader')
-})*/
-
-//import * as contacts from './modules/contacts'
-//import * as about from './modules/about'
 import * as slides from './modules/slides'
 
-import newArray from './modules/new-array'
+import Barba from 'barba.js'
+import homepage from './modules/homepage'
+
+import * as gsap from 'gsap'
 
 import Y from './modules/Y'
 var P = undefined
@@ -21,6 +14,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
   P = [].concat(newArray(slides.slides))
   new Y('#loader').init(P).then(function () {
-    console.log('init then promise')
+    Barba.Pjax.start()
+    Barba.Prefetch.init()
+    gsap.to('#loader', .8, {
+      autoAlpha: 0
+    })
+  })
+
+  Barba.Dispatcher.on('linkClicked', function (n) {
+    console.log('dispacher linkClicked', n)
+  })
+
+  Barba.Dispatcher.on('newPageReady', function (t) {
+    console.log('dispacher newPageReady', t)
   })
 })

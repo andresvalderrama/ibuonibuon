@@ -1,28 +1,35 @@
 //import Ww from './ww'
 import * as PIXI from 'pixi.js'
-import WW from './ww'
+import * as gsap from 'gsap'
 
-export default class extends WW{
+import WW from './ww'
+import * as T from './T'
+
+export default class extends WW {
   constructor(selector) {
-    super()
+    super(selector)
 
     this.resources = []
     this.loader = new PIXI.loaders.Loader
+
+    this.$els.bar = T.qs(this.options.bar, this.$el)
+    this.$els.graphicBar = T.qs(this.options.graphicBar, this.$el)
+    this.$els.progress = T.qs(this.options.progress, this.$el)
+
+    this.$els.bars = [this.$els.bar, this.$els.progress]
 
   }
 
   preload(array, ele) {
     var self = this
     var i = []
-    //var r = d(array)
-    //var i = []
-
+    
     if (Array.isArray(array) && array.length) {
       array.forEach(function (ele) {
         ele.sprites.forEach(function (sprite) {
           if (!i.includes(sprite.url)) {
             //var e = T.isMobile ? `assets/images/mobile/${sprite.url}.png` : `assets/images/${sprite.url}.png`
-            var e =  `assets/images/${sprite.url}.png`
+            var e = `assets/images/${sprite.url}.png`
 
             i.push(sprite.url)
             self.loader.add(sprite.url, e)
@@ -32,22 +39,68 @@ export default class extends WW{
     }
 
     this.loader.once('complete', function () {
-      console.log('loader once -> complete')
-      self.resources.push(e)
+      self.resources.push(ele)
       self.emit('loaded')
       self.destroy()
     })
 
-    console.log('preload thissss', this)
-    console.log('preload selffff', self)
   }
   init(array) {
-    //var self = this;
+    var self = this
 
     this.allDone = null
     this.preload(array)
-    //this.loader.load()
+    this.loader.load()
 
-    console.log('init thiss', this)
+    gsap.set(this.$els.bar, {
+      width: 0
+    })
+
+    this.loader.onProgress.add(function (loader) {
+      gsap.to(self.$els.bar, 1.2, {
+        width: loader.progress + '%'
+      })
+
+      var e = parseInt(loader.progress)
+      var progressValue = e >= 95 ? '100' : e
+
+      self.$els.progress.innerHTML = progressValue
+    })
+
+    return new Promise(function (resolve) {
+      self.allDone = resolve
+    })
+
+  }
+  destroy() {
+    var self = this
+    var time = .6
+    var tween = new gsap.TimelineMax({
+      onComplete: function () {
+        self.allDone()
+      }
+    })
+
+    tween
+      .to(this.$els.graphicBar, time, {
+        scaleX: 0,
+        delay: 2,
+        ease: gsap.Power4.easeOut
+      })
+      .to('.loading-text', .4, {
+        xPercent: 100,
+        autoAlpha: 0,
+        ease: gsap.Power4.easeOut
+      }, '-=' + time)
+      .to(this.$el, .5, {
+        opacity: 0
+      })
+  }
+  getDefaultOptions() {
+    return {
+      graphicBar: '[data-bar]',
+      bar: '.c-loader__wrapper',
+      progress: '[data-progress]'
+    }
   }
 }

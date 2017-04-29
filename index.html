@@ -1,13 +1,188 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
+
+  <link rel="stylesheet" href="assets/css/main.css">
 </head>
+
 <body>
-  
+  <div id="canvas"></div>
+
+  <div id="loader">
+    <div class="c-loader">
+      <div class="c-loader__wrapper">
+        <span class="loading-text">Loading</span>
+        <span data-bar></span>
+      </div>
+      <span data-progress class="loading-text">0</span>
+    </div>
+  </div>
+
+  <main id="barba-wrapper" class="page-view">
+    <header class="c-header">
+      <a class="c-header__logo" href="/" data-namespace="homepage">
+        <img src="/assets/images/logo.svg" alt="Logo I Buongiorno">
+      </a>
+      <nav>
+        <ul class="c-nav">
+          <li class="c-nav__item">
+            <a class="o-link" href="/" data-namespace="homepage">Home</a>
+          </li>
+          <li class="c-nav__item">
+            <a class="o-link" href="/about" data-namespace="about">About</a>
+          </li>
+          <li class="c-nav__item">
+            <a class="o-link" href="/contacts" data-namespace="contacts">Contatti</a>
+          </li>
+          <li class="c-nav__item">
+            <a class="o-link o-link--language no-barba" href="/en">en</a>
+          </li>
+          <button class="c-nav__item c-sound o-link" data-hide-cursor data-toggle-sound>
+                <span>mute</span>
+                <span class="play">play</span>
+            </button>
+        </ul>
+      </nav>
+    </header>
+
+
+    <div class="barba-container" data-namespace="homepage">
+      <div id="scrollable">
+        <section id="slider">
+          <nav id="slider-navigator" class="c-navigator">
+            <ul class="c-navigator__container"></ul>
+          </nav>
+          <ul class="c-slider">
+            <li class="c-slide" data-active data-title="Benvenuto">
+              <div class="c-dot">
+                <a data-hover href="/about" data-namespace="about">
+                  <svg class="o-big-dot" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="50" />
+                  </svg>
+                  <div class="c-dot__text" data-split>
+                    <h2>Vinicultura del Salento</h2>
+                    <strong class="o-subtitle">Carovigno</strong>
+                  </div>
+                </a>
+                <div class="drag-or-scroll" data-tip data-split>
+                  drag <span class="u-hidden--until-l-tablet">o scroll</span> per navigare
+                </div>
+              </div>
+            </li>
+
+
+            <li class="c-slide" data-title="Primitivo">
+              <div class="c-dot">
+                <a data-hover href="/products/primitivo" data-namespace="product">
+                  <svg class="o-big-dot" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="50" />
+                  </svg>
+                  <div class="c-slide__text" data-split>
+                    <h2>Primitivo</h2>
+                    <strong class="o-subtitle">Salento Rosso IGT</strong>
+                  </div>
+                </a>
+              </div>
+            </li>
+
+            <li class="c-slide" data-title="Negroamaro">
+              <div class="c-dot">
+                <a data-hover href="/products/negroamaro" data-namespace="product">
+                  <svg class="o-big-dot" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="50" />
+                  </svg>
+                  <div class="c-slide__text" data-split>
+                    <h2>Negroamaro</h2>
+                    <strong class="o-subtitle">Salento Rosso IGT</strong>
+                  </div>
+                </a>
+              </div>
+            </li>
+
+            <li class="c-slide" data-title="Fiano">
+              <div class="c-dot">
+                <a data-hover href="/products/fiano" data-namespace="product">
+                  <svg class="o-big-dot" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="50" />
+                  </svg>
+                  <div class="c-slide__text" data-split>
+                    <h2>Fiano</h2>
+                    <strong class="o-subtitle">Salento Bianco IGT</strong>
+                  </div>
+                </a>
+              </div>
+            </li>
+
+            <li class="c-slide" data-title="Rosalento">
+              <div class="c-dot">
+                <a data-hover href="/products/rosalento" data-namespace="product">
+                  <svg class="o-big-dot" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="50" />
+                  </svg>
+                  <div class="c-slide__text" data-split>
+                    <h2>Rosalento</h2>
+                    <strong class="o-subtitle">Rosato Salento IGT</strong>
+                  </div>
+                </a>
+              </div>
+            </li>
+
+            <li class="c-slide" data-title="Nicolaus">
+              <div class="c-dot">
+                <a data-hover href="/products/nicolaus" data-namespace="product">
+                  <svg class="o-big-dot" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="50" />
+                  </svg>
+                  <div class="c-slide__text" data-split>
+                    <h2>Nicolaus</h2>
+                    <strong class="o-subtitle">Puglia Rosso IGT</strong>
+                  </div>
+                </a>
+              </div>
+            </li>
+
+            <li class="c-slide" data-title="Celestiaco">
+              <div class="c-dot">
+                <a data-hover href="/products/celestiaco" data-namespace="product">
+                  <svg class="o-big-dot" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="50" />
+                  </svg>
+                  <div class="c-slide__text" data-split>
+                    <h2>Celestiaco</h2>
+                    <strong class="o-subtitle">Salento Rosso IGT</strong>
+                  </div>
+                </a>
+              </div>
+            </li>
+
+            <li class="c-slide" data-title="Olio">
+              <div class="c-dot">
+                <a data-hover href="/products/olio" data-namespace="product">
+                  <svg class="o-big-dot" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="50" />
+                  </svg>
+                  <div class="c-slide__text" data-split>
+                    <h2>Olio</h2>
+                    <strong class="o-subtitle">Extravergine d&#39;Oliva</strong>
+                  </div>
+                </a>
+              </div>
+            </li>
+
+          </ul>
+        </section>
+      </div>
+    </div>
+
+  </main>
+
+
   <script src="dist/bundle.js"></script>
 </body>
+
 </html>
