@@ -2,10 +2,10 @@
 import * as PIXI from 'pixi.js'
 import * as gsap from 'gsap'
 
-import WW from './ww'
+import BootstrapComponent from './BootstrapComponent'
 import * as T from './T'
 
-export default class extends WW {
+export default class extends BootstrapComponent {
   constructor(selector) {
     super(selector)
 

@@ -7,13 +7,13 @@ import homepage from './modules/homepage'
 
 import * as gsap from 'gsap'
 
-import Y from './modules/Y'
+import Loader from './modules/Loader'
 var P = undefined
 
 document.addEventListener('DOMContentLoaded', function () {
 
   P = [].concat(newArray(slides.slides))
-  new Y('#loader').init(P).then(function () {
+  new Loader('#loader').init(P).then(function () {
     Barba.Pjax.start()
     Barba.Prefetch.init()
     gsap.to('#loader', .8, {
