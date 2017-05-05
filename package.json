@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "barba.js": "^1.0.0",
+    "classie": "^1.0.0",
     "events": "^1.1.1",
     "gsap": "^1.19.1",
     "pixi.js": "^4.5.1"

@@ -1,4 +1,3 @@
-//import Ww from './ww'
 import * as PIXI from 'pixi.js'
 import * as gsap from 'gsap'
 

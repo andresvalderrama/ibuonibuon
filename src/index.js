@@ -1,11 +1,15 @@
 import newArray from './modules/new-array'
 
+import * as T from './modules/T'
+
 import * as slides from './modules/slides'
 
 import Barba from 'barba.js'
 import homepage from './modules/homepage'
 
 import * as gsap from 'gsap'
+
+import classie from 'classie'
 
 import Loader from './modules/Loader'
 var P = undefined
@@ -26,6 +30,11 @@ document.addEventListener('DOMContentLoaded', function () {
   })
 
   Barba.Dispatcher.on('newPageReady', function (t) {
-    console.log('dispacher newPageReady', t)
+
+    var element = T.qs('[data-namespace='+ t.namespace +']', T.qs('.c-nav'))
+
+    if (undefined !== element && null !== element) {
+      classie.add(element, 'is-active')
+    }
   })
 })
