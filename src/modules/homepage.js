@@ -6,6 +6,8 @@ import Slider from './Slider'
 
 import Barba from 'barba.js'
 
+import * as gsap from 'gsap'
+
 var homepage = Barba.BaseView.extend({
   namespace: 'homepage',
   onEnter: function () {
@@ -24,16 +26,20 @@ var homepage = Barba.BaseView.extend({
     })
     this.slider.init()
     this.slider.on('animation:first', function () {
-      console.log('animation:first')
+      var element = T.qs('[data-tip]', self.container)
+
+      gsap.to(element, .5, {
+        autoAlpha: 0
+      })
     })
 
     console.log('on enter homepage')
   },
   onEnterCompleted: function () {
-    var t = {
+    /*var t = {
       slides: about.slidesAbout,
       text: about.textAbout
-    }
+    }*/
 
     //h.createContainer(t)
     this.slider.start()

@@ -67,6 +67,19 @@ export default class SliderNavigator extends BootstrapComponent {
     this.distributeAround()
   }
 
+  start(xPosition, current, totalWidth) {
+    this.calculateRotation(xPosition, current, totalWidth)
+
+    gsap.fromTo(this.$els.container, 1.2, {
+      display: 'block',
+      yPercent: -50,
+      opacity: 1
+    }, {
+      display: 'block',
+      yPercent: 0
+    })
+  }
+
   distributeAround() {
     var radians = T.radians(90)
     var clientWidth = this.$els.container.clientWidth
@@ -86,6 +99,30 @@ export default class SliderNavigator extends BootstrapComponent {
       })
 
       radians += steps
+    }
+  }
+
+  calculateRotation(xPos, current, width) {
+    var radians = xPos * this.getState('radius') / width * -1
+
+    this.setState('current', current)
+    this.animate(radians)
+  }
+
+  animate(radians) {
+    var self = this
+
+    for(var i = 0; i < this.$els.items.length; i++) {
+      var element = this.$els.items[i]
+
+      element.removeAttribute('data-current-nav')
+      if (self.getState('current') === i) {
+        element.setAttribute('data-current-nav', '')
+      }
+
+      gsap.set(this.$els.container, {
+        rotation: T.degress(radians)
+      })
     }
   }
 }

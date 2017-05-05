@@ -48,7 +48,7 @@ export default class Slider extends BootstrapComponent {
       prev: this.options.startFrom - 1,
       next: this.options.startFrom + 1,
       totalWidth: 0,
-      isFirstAnim: false
+      isFirstAnim: true
     }
   }
 
@@ -93,11 +93,23 @@ export default class Slider extends BootstrapComponent {
   }
 
   start() {
-    //var xPosition = T.viewportSize().x * this.getState('current')
+    var xPosition = T.viewportSize().x * this.getState('current')
 
     this.slideTo(this.getState('current'), true)
+    this.setEvents()
+    gsap.set(this.$els.container, {
+      x: -xPosition
+    })
 
-    //left make more code
+    if (this.getState('next') >= this.getState('itemsAmount') - 1) {
+      this.setState('next', this.getState('current'))
+    }
+
+    this.$refs.navigator.start(-xPosition, this.getState('current'), this.getState('totalWidth'))
+  }
+
+  setEvents() {
+    console.log('setEvents Slider.js')
   }
 
   updateIndexes(index) {
@@ -129,8 +141,53 @@ export default class Slider extends BootstrapComponent {
     var self = this
 
     this.setState('animating', true)
-    //this.getState('isFirstAnim', )
+    
+    if (this.getState('isFirstAnim') && !animate) {
+      this.setState('isFirstAnim', false)
+    }
+
     this.emit('animation:first')
+    
+    var currentPos = this.getState('currentPos')
+    var time = animate ? 0 : 2
+    var i = {
+      x: T.viewportSize().x * this.getState('current')
+    }
+
+    this.tween = gsap.to(currentPos, time, {
+      x: i.x,
+      onUpdateParams: ['{self}'],
+      ease: gsap.Back.easeOut.config(.8),
+      onUpdate: function () {
+        gsap.set(self.$els.container, {
+          x: currentPos.x
+        })
+
+        //y.default.setPos(n.x, e.getState("current")),
+        //canvas.setPos(currentPos.x, self.getState('current'))
+
+        if (self.$refs.navigator) {
+          self.$refs.navigator.calculateRotation(currentPos.x, self.getState('current'), self.getState('totalWidth'))
+        }
+
+        self.setState('old', self.getState('current'))
+        self.setState('current', currentPos)
+
+      },
+      onStart: function () {
+        gsap.set(self.$els.currentEl, {
+          pointerEvents: 'none'
+        })
+      },
+      onComplete: function () {
+        self.setState('animating', false)
+        gsap.set(self.$els.items, {
+          pointerEvents: ''
+        })
+        self.updateFocus()
+      }
+    })
+
 
   }
 
