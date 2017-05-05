@@ -102,5 +102,33 @@ export default class BootstrapComponent extends EventEmitter {
   }
 
   beforeInit() { }
+
+  closeRefs() {
+    var self = this
+
+    return Promise.all(Object.keys(this.$refs).map(function (element) {
+      return self.$refs[element].destroy()
+    })).then(function () {
+      self.$refs = {}
+    }).catch(function (error) {
+      console.log('close refs', error)
+    })
+  }
+
+  destroy() {
+    var self = this
+
+    this.emit('destroy')
+
+    //this.undelegate() ???
+    this.removeAllListeners()
+    this.$el.removeAttribute('data-ui-uid')
+    this.closeRefs().then(function () {
+      self._active = false
+    }).catch(function (error) {
+      console.log('destroy catch', error)
+    })
+
+  }
 }
 

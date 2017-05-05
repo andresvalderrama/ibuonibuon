@@ -75,8 +75,10 @@ export default class extends BootstrapComponent {
     var self = this
     var time = .6
     var tween = new gsap.TimelineMax({
-      onComplete: function () {
+      onComplete: () => {
         self.allDone()
+        super.destroy()
+        document.body.removeChild(self.$el)
       }
     })
 
