@@ -171,7 +171,7 @@ export default class Slider extends BootstrapComponent {
         }
 
         self.setState('old', self.getState('current'))
-        self.setState('current', currentPos)
+        self.setState('currentPos', currentPos)
 
       },
       onStart: function () {
