@@ -121,7 +121,7 @@ export default class Slider extends BootstrapComponent {
         if (event.clientX < T.viewportSize().x / 3) {
           self.slideTo(self.getState('prev'))
         } else if (event.clientX > T.viewportSize().x - T.viewportSize().x / 3) {
-          self.slideTo(self.getState('prev'))
+          self.slideTo(self.getState('next'))
         }
       }
     })
@@ -221,7 +221,7 @@ export default class Slider extends BootstrapComponent {
 
       },
       onStart: function () {
-        gsap.set(self.$els.currentEl, {
+        gsap.set(self.currentEl, {
           pointerEvents: 'none'
         })
       },
