@@ -113,7 +113,7 @@ export default class SliderNavigator extends BootstrapComponent {
     var self = this
 
     for(var i = 0; i < this.$els.items.length; i++) {
-      var element = this.$els.items[i]
+      var element = self.$els.items[i]
 
       element.removeAttribute('data-current-nav')
       if (self.getState('current') === i) {

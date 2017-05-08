@@ -42,7 +42,9 @@ export default class BootstrapComponent extends EventEmitter {
 
     this.$refs[selector] = a
 
-    ref ? ref.destroy().then(function () { console.log('todo') }) : Promise.resolve(a.init())
+    ref 
+      ? ref.destroy().then(function () { console.log('todo') }) 
+      : Promise.resolve(a.init())
   }
 
   init(state = {}) {
