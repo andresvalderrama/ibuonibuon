@@ -6,7 +6,7 @@ import BootstrapComponent from './BootstrapComponent'
 
 import * as gsap from 'gsap'
 
-import * as Lethargy from 'lethargy'
+import { Lethargy } from 'lethargy'
 
 export default class Slider extends BootstrapComponent {
   constructor(id, options) {
@@ -141,8 +141,12 @@ export default class Slider extends BootstrapComponent {
     })
   }
 
-  bindKeys(t) {
-    switch (null === t.which && (t.which = null !== t.charCode ? t.charCode : t.keyCode), t.which) {
+  bindKeys(keyEvent) {
+    if (null === keyEvent.which) {
+      keyEvent.which = null !== keyEvent.charCode ? keyEvent.charCode : keyEvent.keyCode
+    }
+
+    switch (keyEvent.which) {
     case 39:
       this.slideTo(this.getState('next'))
       break
@@ -193,7 +197,7 @@ export default class Slider extends BootstrapComponent {
     var currentPos = this.getState('currentPos')
     var time = animate ? 0 : 2
     var i = {
-      x: T.viewportSize().x * this.getState('current')
+      x: -T.viewportSize().x * this.getState('current')
     }
 
     this.tween = gsap.to(currentPos, time, {
@@ -241,7 +245,7 @@ export default class Slider extends BootstrapComponent {
 
   bindScroll() {
     var self = this
-    var lethargy = Lethargy
+    var lethargy = new Lethargy
 
     this.handleMouse = T.handleEvent('mousewheel', {
       onElement: this.$el,
