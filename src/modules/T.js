@@ -44,3 +44,27 @@ export function radians(degress) {
 export function degress(radians) {
   return 180 * radians / Math.PI
 }
+
+export function handleEvent(event, options = {}) {
+
+  var element = options.onElement
+  var callback = options.withCallback
+  var capture = options.useCapture
+
+  var s = undefined !== capture && capture
+  var a = arguments[2]
+  var domElement = element || document.documentElement
+
+  function handleEvent(event) {
+    if ('function' == typeof callback) {
+      callback.call(a, event)
+    }
+  }
+
+  handleEvent.destroy = function () {
+    return domElement.removeEventListener(event, handleEvent, s)
+  }
+  domElement.addEventListener(event, handleEvent, s)
+
+  return handleEvent
+}

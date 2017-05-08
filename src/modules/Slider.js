@@ -6,6 +6,8 @@ import BootstrapComponent from './BootstrapComponent'
 
 import * as gsap from 'gsap'
 
+import * as Lethargy from 'lethargy'
+
 export default class Slider extends BootstrapComponent {
   constructor(id, options) {
     super(id, options)
@@ -112,6 +114,44 @@ export default class Slider extends BootstrapComponent {
     var self = this
 
     this.bindScroll()
+
+    this.handleClick = T.handleEvent('click', {
+      onElement: T.qs('.c-slider', this.$el),
+      withCallback: function (event) {
+        if (event.clientX < T.viewportSize().x / 3) {
+          self.slideTo(self.getState('prev'))
+        } else if (event.clientX > T.viewportSize().x - T.viewportSize().x / 3) {
+          self.slideTo(self.getState('prev'))
+        }
+      }
+    })
+
+    this.bindKeys = this.bindKeys.bind(this)
+    document.addEventListener('keydown', this.bindKeys)
+
+    this.$refs.navigator.$els.items.forEach(function (element, index) {
+      var r = T.handleEvent('click', {
+        onElement: element,
+        withCallback: function () {
+          self.slideTo(index)
+        }
+      })
+
+      self.bindIndicators.push(r)
+    })
+  }
+
+  bindKeys(t) {
+    switch (null === t.which && (t.which = null !== t.charCode ? t.charCode : t.keyCode), t.which) {
+    case 39:
+      this.slideTo(this.getState('next'))
+      break
+    case 37:
+      this.slideTo(this.getState('prev'))
+      break
+    default:
+      return
+    }
   }
 
   updateIndexes(index) {
@@ -143,13 +183,13 @@ export default class Slider extends BootstrapComponent {
     var self = this
 
     this.setState('animating', true)
-    
+
     if (this.getState('isFirstAnim') && !animate) {
       this.setState('isFirstAnim', false)
     }
 
     this.emit('animation:first')
-    
+
     var currentPos = this.getState('currentPos')
     var time = animate ? 0 : 2
     var i = {
@@ -201,6 +241,23 @@ export default class Slider extends BootstrapComponent {
 
   bindScroll() {
     var self = this
-    var Lethargy = new Lethargy
+    var lethargy = Lethargy
+
+    this.handleMouse = T.handleEvent('mousewheel', {
+      onElement: this.$el,
+      withCallback: function (event) {
+        event.preventDefault()
+        event.stopPropagation()
+        if (!self.getState('animating')) {
+          var direction = undefined
+
+          if (lethargy.check(event) !== false) {
+            direction = 1 === lethargy.check(event) ? 'prev' : 'next'
+
+            self.slideTo(self.getState(direction))
+          }
+        }
+      }
+    })
   }
 }
