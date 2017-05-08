@@ -109,7 +109,9 @@ export default class Slider extends BootstrapComponent {
   }
 
   setEvents() {
-    console.log('setEvents Slider.js')
+    var self = this
+
+    this.bindScroll()
   }
 
   updateIndexes(index) {
@@ -195,5 +197,10 @@ export default class Slider extends BootstrapComponent {
     var section = T.qs('[data-namespace="product"]', this.currentEl)
 
     section && section.focus()
+  }
+
+  bindScroll() {
+    var self = this
+    var Lethargy = new Lethargy
   }
 }
