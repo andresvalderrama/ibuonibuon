@@ -1,4 +1,4 @@
-var slides = [
+var slidesHome = [
   {
     id: 'intro',
     title: 'Benvenuto',
@@ -232,4 +232,4 @@ userAgent.indexOf('firefox') > -1
   : texts = ['Ci mbie mieru campa cent\'annit']
 
 export { texts }
-export { slides }
+export { slidesHome }
