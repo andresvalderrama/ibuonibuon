@@ -87,7 +87,7 @@ export default class extends BootstrapComponent {
     var tween = new gsap.TimelineMax({
       onComplete: () => {
         this.allDone()
-        //super.destroy()
+        //super.destroy() --TODO
         document.body.removeChild(this.$el)
       }
     })
@@ -103,7 +103,7 @@ export default class extends BootstrapComponent {
         autoAlpha: 0,
         ease: gsap.Power4.easeOut
       }, '-=' + time)
-      .to(this.$el, .5, {
+      .to(this.$el, .8, {
         opacity: 0
       })
   }
