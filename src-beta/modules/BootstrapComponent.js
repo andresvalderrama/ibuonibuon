@@ -13,7 +13,7 @@ export default class BootstrapComponent extends EventEmitter {
 
     /** revisar ???
       if () {
-      }     
+      }
     */
 
     this.$els = {}
@@ -37,13 +37,13 @@ export default class BootstrapComponent extends EventEmitter {
       arrayParams[s - 2] = arguments[s]
     }
 
-    var a = Class instanceof BootstrapComponent ? Class : new (Function.prototype.bind.apply(Class, [null].concat(arrayParams)))
+    var a = Class instanceof BootstrapComponent ? Class : new (Function.prototype.apply(Class, arrayParams))
     var ref = this.$refs[selector]
 
     this.$refs[selector] = a
 
-    ref 
-      ? ref.destroy().then(function () { console.log('todo') }) 
+    ref
+      ? ref.destroy().then(function () { console.log('todo') })
       : Promise.resolve(a.init())
   }
 

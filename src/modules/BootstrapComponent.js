@@ -18,10 +18,11 @@ export default class BootstrapComponent extends EventEmitter {
     /** revisar ???
       if (no es un dom element) {
         console.warn('el elemento'+ this.el +' no es un dom element')
-      }     
+      }
     */
 
     this.$els = {}
+    this.$refs = {}
     this.options = Object.assign({}, this.getDefaultOptions(), options)
 
     this.state = new Map
@@ -40,7 +41,7 @@ export default class BootstrapComponent extends EventEmitter {
     if (!this.$el.id) {
       this.$el.id = ` component${this._uid}`
     }
-    
+
     var stateEvents = this.bindStateEvents()
     Object.keys(stateEvents).forEach(function (event) {
       self.on(` change:${event}` , stateEvents[event].bind(self))
@@ -62,7 +63,7 @@ export default class BootstrapComponent extends EventEmitter {
   setState(key, value) {
     var n = arguments.length > 2 && undefined !== arguments[2] && arguments[2] //???
     var currenState = this.state.get(key)
-    
+
     if (currenState !== value) {
       this.state.set(key, value)
       n || this.emit(` change:${key}` , value, currenState) //???
@@ -73,5 +74,26 @@ export default class BootstrapComponent extends EventEmitter {
 
   getState(key) {
     return this.state.get(key)
+  }
+
+  setRef(refId, Class) {
+    var params = arguments.length
+    var classParams = Array(params > 2 ? params - 2: 0)
+
+    for (var s = 2; s < params; s++) {
+      classParams[s - 2] = arguments[s]
+    }
+
+    console.log(Class instanceof BootstrapComponent)
+    var refClass = Class instanceof BootstrapComponent
+      ? Class
+      : new (Function.prototype.bind.apply(Class, [null].concat(classParams)))
+
+    var refExist = this.$refs[refId]
+    this.$refs[refId] = refClass
+
+    refExist
+      ? refExist.destroy().then(function () { console.log('TODO')}) //TODO
+      : Promise.resolve(refClass.init())
   }
 }

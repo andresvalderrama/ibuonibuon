@@ -1,16 +1,23 @@
 import * as gsap from 'gsap'
+import { Lethargy } from 'lethargy'
 
 import BootstrapComponent from './BootstrapComponent'
+import SliderNavigator from './SliderNavigator'
 import * as utils from './utils'
 
 export default class Slider extends BootstrapComponent {
-  constructor (DomSelector, options = {}) {
+  constructor(DomSelector, options = {}) {
     super(DomSelector, options)
 
     this.$els.container = utils.qsa(this.options.slidesContainerClass, this.$el)
     this.$els.items = utils.qsa(this.options.itemClass, this.$el)
 
     this.gridWidth = utils.viewportSize().x
+
+    var $sliderNavigator = utils.qs('#slider-navigator', this.$el)
+    this.setRef('navigator', SliderNavigator, $sliderNavigator, {
+      items: this.$els.items
+    })
   }
 
   getDefaultOptions() {
@@ -23,7 +30,7 @@ export default class Slider extends BootstrapComponent {
 
   getInitialState() {
     return {
-      currentPos: {x: 0},
+      currentPos: { x: 0 },
 
       itemsAmount: this.$els.items.length,
 
@@ -73,18 +80,27 @@ export default class Slider extends BootstrapComponent {
   }
 
   start() {
-    var _current = this.getState('current')
-    //var xPosition = utils.viewportSize().x * _current
+    var xPosition = utils.viewportSize().x * this.getState('current')
 
-    this.slideTo(_current, true)
+    this.slideTo(this.getState('current'), true)
     this.setEvents()
+
+    gsap.set(this.$els.container, {
+      x: -xPosition
+    })
+
+    if (this.getState('next') >= this.getState('itemsAmount') - 1) { //???
+      this.setState('next', this.getState('current'))
+    }
+
+    this.$refs.navigator.start(-xPosition, this.getState('current'), this.getState('totalWidth'))
   }
 
   slideTo(index, animate = false) {
     this.updateIndexes(index)
-    this.animate(animate)   
+    this.animate(animate)
   }
-  
+
   updateIndexes(index) {
     var self = this
 
@@ -110,9 +126,11 @@ export default class Slider extends BootstrapComponent {
 
     this.setState('animating', true)
 
-    if(this.getState('isFirstAnim') && !animate) { this.setState('isFirstAnim', false) }
+    if (this.getState('isFirstAnim') && !animate) {
+      this.setState('isFirstAnim', false)
+      this.emit('animation:first')
+    }
 
-    this.emit('animation:first')
 
     var time = animate ? 0 : 2
     var currentPos = this.getState('currentPos')
@@ -153,12 +171,58 @@ export default class Slider extends BootstrapComponent {
     var self = this
     var element = utils.qs(this.options.slidesContainerClass, this.$el)
 
-    element.addEventListener('click', function (event) {
-      if(event.clientX < utils.viewportSize().x / 3) {
-        self.slideTo(self.getState('prev'))
-      } else if (event.clientX > utils.viewportSize().x - utils.viewportSize().x / 3) {
-        self.slideTo(self.getState('next'))
+    //on mousewheel
+    this.bindScroll()
+
+
+    //on click
+    this.bindClick = this.bindClick.bind(this)
+    element.addEventListener('click', this.bindClick)
+
+    //on left and right keydown
+    this.bindKeys = this.bindKeys.bind(this)
+    document.addEventListener('keydown', this.bindKeys)
+  }
+
+  bindScroll() {
+    var self = this
+    var lethargy = new Lethargy
+
+    this.$el.addEventListener('mousewheel', function (event) {
+      event.preventDefault()
+      event.stopPropagation()
+
+      if (!self.getState('animating') && lethargy.check(event) !== false) {
+        var direction = undefined
+
+        direction = 1 === lethargy.check(event) ? 'prev' : 'next'
+        self.slideTo(self.getState(direction))
       }
     })
+  }
+
+  bindClick(clickEvent) {
+    if (clickEvent.clientX < utils.viewportSize().x / 3) {
+      this.slideTo(this.getState('prev'))
+    } else if (clickEvent.clientX > utils.viewportSize().x - utils.viewportSize().x / 3) {
+      this.slideTo(this.getState('next'))
+    }
+  }
+
+  bindKeys(keyEvent) {
+    if (null === keyEvent.which) {
+      keyEvent.which = null !== keyEvent.charCode ? keyEvent.charCode : keyEvent.keyCode
+    }
+
+    switch (keyEvent.which) {
+      case 39:
+        this.slideTo(this.getState('next'))
+        break
+      case 37:
+        this.slideTo(this.getState('prev'))
+        break
+      default:
+        return
+    }
   }
 }
